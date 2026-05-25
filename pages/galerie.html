@@ -1,0 +1,45 @@
+<div class="hero-scene text-center text-white">
+    <div class="hero-scene-content">
+        <h1>Galerie</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="text-center">
+        <button  id="btnAddphoto"type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditionPhotoModal" data-show="admin">Ajouter une photo</button>
+    </div>
+    <div class="row row-cols-2 row-cols-lg-3" id="allImages">
+    </div>
+    <div class="col-12 text-center mt-3">
+        <a href="/reserver" onclick="route(event)" class="btn btn-primary">Réserver</a>    
+    </div> 
+</div>
+
+<!-- Modal edition -->
+<div class="modal fade" id="EditionPhotoModal" tabindex="-1" aria-labelledby="EditionPhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="EditionPhotoModalLabel">Edition Photo</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="addPhotoForm">
+                <input type="hidden" id="photoIdInput">
+                <div class="mb-3">
+                  <label for="NamePhotoInput" class="form-label">Titre</label>
+                  <input type="text" class="form-control" id="NamePhotoInput" placeholder="Lasagnes à la bolognese" name="Titre"> 
+                </div>
+                <div class="mb-3">
+                  <label for="ImageInput" class="form-label">Image</label>
+                  <input type="file" class="form-control" id="ImageInput"  name="Image">
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" id="btnSavePhoto">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+

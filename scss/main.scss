@@ -1,0 +1,172 @@
+@import url("/node_modules/bootstrap-icons/font/bootstrap-icons.css");
+@import 'custom';
+
+html{ 
+    position:relative;
+    min-height: 100%;
+}
+
+main{
+    margin-bottom: 270px;;
+}
+
+footer.footer{
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+p{
+    font-family: $font-family-serif;
+    font-size: 18px;
+}
+
+.hero-scene{
+    position: relative;
+    margin-bottom: 15px;
+    &::before{
+        content:"";
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image: url(../images/image1.jpg);
+        background-size: cover;
+        filter: brightness(0.3);
+    }
+
+    *{
+        //Positionner les éléments devant le ::before
+        position:relative;
+    }
+
+    .hero-scene-content{
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.text-justify{
+    text-align: justify;
+}
+
+.image-card{
+    position:relative;
+    &:hover{
+        .titre-image,
+        .action-image-buttons{
+           opacity: 1;
+        }
+
+        img{
+            filter: brightness(0.3);
+        }
+    }
+
+    img{
+        transition: all 0.3s;
+    }
+
+    .titre-image{
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: all 0.3s;
+    }
+
+    .action-image-buttons{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 5px;
+        display: flex;
+        justify-content: space-between;
+
+        opacity: 0;
+        transition: all 0.3s;
+
+    }
+
+}
+
+.form-label{
+    color: $primary;
+}
+
+.allreservations{
+    a{
+        display: block;
+        color: $black;
+        padding:10px;
+    }
+}
+
+.page-carte {
+  .carte-menu {
+    background-color: #f8f5f2;
+  }
+
+  .menu-category {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    height: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .menu-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: $primary;
+    border-bottom: 2px solid #e5d3c5;
+    padding-bottom: 10px;
+  }
+
+  .menu-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .menu-item:last-child {
+    border-bottom: none;
+  }
+
+  .menu-item h4 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: $black;
+  }
+
+  .menu-item p {
+    margin: 8px 0 0;
+    color: #666666;
+    font-size: 0.95rem;
+  }
+
+  .price {
+    font-weight: bold;
+    color: $primary;
+    font-size: 1rem;
+  }
+}
+
+.reservation-card {
+  border-radius: 16px;
+}
+
+.reservation-card .card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.reservation-card p {
+  font-size: 1rem;
+}
