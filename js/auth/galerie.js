@@ -12,6 +12,7 @@ fetch(apiUrl + "pictures")
     });
 
     galerieImage.innerHTML = html;
+    showAndHideElementsForRoles();
   })
   .catch((error) => {
     console.error("Erreur galerie :", error);
@@ -21,56 +22,47 @@ function getImage(id, titre, urlImage) {
   titre = sanitizeHTML(titre);
   urlImage = sanitizeHTML(urlImage);
 
+  const isAdmin = getRole() === "ROLE_ADMIN";
+
+  const adminButtons = isAdmin
+    ? `
+      <div class="action-image-buttons">
+        <button type="button" class="btn btn-outline-light btn-sm" onclick="globalThis.editPicture(${id}, '${titre}')">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+
+        <button 
+          type="button" 
+          class="btn btn-outline-light btn-sm"
+          onclick="globalThis.deletePicture(${id})"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    `
+    : "";
+
   return `
     <div class="col p-3" id="picture-${id}">
       <div class="image-card text-white">
-        <img src="${urlImage}" class="rounded w-100"/>
+        <img src="${urlImage}" class="rounded w-100" alt="${titre}"/>
         <p class="titre-image">${titre}</p>
-
-        <div class="action-image-buttons" data-show="admin">
-          <button type="button" class="btn btn-outline-light btn-sm" onclick="globalThis.editPicture(${id}, '${titre}')">
-            <i class="bi bi-pencil-square"></i>
-          </button>
-
-          <button 
-            type="button" 
-            class="btn btn-outline-light btn-sm"
-            onclick="globalThis.deletePicture(${id})"
-          >
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
+        ${adminButtons}
       </div>
     </div>
   `;
 }
 
+let pictureIdToDelete = null;
+
 globalThis.deletePicture = function (id) {
-  console.log("Delete id:", id);
+  pictureIdToDelete = id;
 
-  if (!confirm("Voulez-vous vraiment supprimer cette image ?")) {
-    return;
-  }
+  const deleteModal = new bootstrap.Modal(
+    document.getElementById("deletePhotoModal")
+  );
 
-  fetch(`${apiUrl}pictures/${id}`, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erreur suppression");
-      }
-
-      const pictureCard = document.getElementById(`picture-${id}`);
-
-      if (pictureCard) {
-        pictureCard.remove();
-      } else {
-        location.reload();
-      }
-    })
-    .catch((error) => {
-      console.error("Erreur suppression :", error);
-    });
+  deleteModal.show();
 };
 
 const addPhotoForm = document.getElementById("addPhotoForm");
@@ -120,3 +112,39 @@ globalThis.editPicture = function (id, title) {
   modal.show();
 
 };
+
+const confirmDeletePhotoBtn = document.getElementById("confirmDeletePhotoBtn");
+
+if (confirmDeletePhotoBtn) {
+  confirmDeletePhotoBtn.addEventListener("click", function () {
+    if (!pictureIdToDelete) {
+      return;
+    }
+
+    fetch(`${apiUrl}pictures/${pictureIdToDelete}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur suppression");
+        }
+
+        const pictureCard = document.getElementById(
+          `picture-${pictureIdToDelete}`
+        );
+
+        if (pictureCard) {
+          pictureCard.remove();
+        }
+
+        const modalElement = document.getElementById("deletePhotoModal");
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+
+        pictureIdToDelete = null;
+      })
+      .catch((error) => {
+        console.error("Erreur suppression :", error);
+      });
+  });
+}

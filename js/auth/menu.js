@@ -1,28 +1,61 @@
 console.log("MENU JS LOADED");
 
-const entreesContainer = document.getElementById("entrees-container");
-const platsContainer = document.getElementById("plats-container");
-const dessertsContainer = document.getElementById("desserts-container");
-const boissonsContainer = document.getElementById("boissons-container");
+var entreesContainer = document.getElementById("entrees-container");
+var platsContainer = document.getElementById("plats-container");
+var dessertsContainer = document.getElementById("desserts-container");
+var boissonsContainer = document.getElementById("boissons-container");
+
+const btnAddMenu = document.getElementById("btnAddMenu");
+const menuForm = document.getElementById("menuForm");
+const btnSaveMenu = document.getElementById("btnSaveMenu");
+
+const menuIdInput = document.getElementById("menuIdInput");
+const menuNameInput = document.getElementById("menuNameInput");
+const menuDescriptionInput = document.getElementById("menuDescriptionInput");
+const menuPriceInput = document.getElementById("menuPriceInput");
+const menuCategoryInput = document.getElementById("menuCategoryInput");
 
 if (!entreesContainer || !platsContainer || !dessertsContainer || !boissonsContainer) {
   console.error("Un ou plusieurs containers sont introuvables");
 } else {
   fetch(apiUrl + "menus")
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       entreesContainer.innerHTML = "";
       platsContainer.innerHTML = "";
       dessertsContainer.innerHTML = "";
       boissonsContainer.innerHTML = "";
 
-      data.forEach(menu => {
+      data.forEach((menu) => {
+        globalThis.menusData = globalThis.menusData || {};
+        globalThis.menusData[menu.id] = menu;
+
         const col = document.createElement("div");
         col.classList.add("col-12", "col-lg-6");
 
         const safeName = sanitizeHTML(menu.name || "");
         const safePrice = sanitizeHTML(String(menu.price || ""));
         const safeDescription = sanitizeHTML(menu.description || "");
+
+        const isAdmin = getRole() === "ROLE_ADMIN";
+
+        const adminButtons = isAdmin
+          ? `
+            <div class="mt-3 d-flex gap-2">
+              <button
+                class="btn btn-outline-dark btn-sm"
+                onclick="globalThis.editMenu(${menu.id})">
+                Modifier
+              </button>
+
+              <button
+                class="btn btn-danger btn-sm"
+                onclick="globalThis.deleteMenu(${menu.id})">
+                Supprimer
+              </button>
+            </div>
+          `
+          : "";
 
         col.innerHTML = `
           <div class="menu-item card border-0 shadow-sm h-100">
@@ -31,7 +64,10 @@ if (!entreesContainer || !platsContainer || !dessertsContainer || !boissonsConta
                 <h4 class="menu-name mb-0">${safeName}</h4>
                 <span class="menu-price">${safePrice}€</span>
               </div>
+
               <p class="menu-description mb-0">${safeDescription}</p>
+
+              ${adminButtons}
             </div>
           </div>
         `;
@@ -47,7 +83,93 @@ if (!entreesContainer || !platsContainer || !dessertsContainer || !boissonsConta
         }
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Erreur :", error);
     });
 }
+
+if (btnAddMenu) {
+  btnAddMenu.addEventListener("click", function () {
+    menuForm.reset();
+    menuIdInput.value = "";
+
+    const modal = new bootstrap.Modal(document.getElementById("menuModal"));
+    modal.show();
+  });
+}
+
+if (btnSaveMenu) {
+  btnSaveMenu.addEventListener("click", function () {
+    const formData = new FormData();
+
+    formData.append("name", menuNameInput.value.trim());
+    formData.append("description", menuDescriptionInput.value.trim());
+    formData.append("price", menuPriceInput.value.trim());
+    formData.append("category", menuCategoryInput.value);
+
+    const menuId = menuIdInput.value;
+
+    const url = menuId
+      ? `${apiUrl}menus/${menuId}/update`
+      : `${apiUrl}menus`;
+
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur ajout/modification menu");
+        }
+
+        return response.json();
+      })
+      .then(() => {
+        menuForm.reset();
+        location.reload();
+      })
+      .catch((error) => {
+        console.error("Erreur ajout/modification menu :", error);
+      });
+  });
+}
+
+globalThis.deleteMenu = function (id) {
+  if (!confirm("Voulez-vous vraiment supprimer ce plat ?")) {
+    return;
+  }
+
+  fetch(`${apiUrl}menus/${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erreur suppression menu");
+      }
+
+      location.reload();
+    })
+    .catch((error) => {
+      console.error("Erreur suppression menu :", error);
+    });
+};
+
+globalThis.editMenu = function (id) {
+  const menu = globalThis.menusData[id];
+
+  if (!menu) {
+    console.error("Menu not found");
+    return;
+  }
+
+  menuIdInput.value = menu.id;
+  menuNameInput.value = menu.name;
+  menuDescriptionInput.value = menu.description;
+  menuPriceInput.value = menu.price;
+  menuCategoryInput.value = menu.category;
+
+  const modal = new bootstrap.Modal(
+    document.getElementById("menuModal")
+  );
+  modal.show();
+};

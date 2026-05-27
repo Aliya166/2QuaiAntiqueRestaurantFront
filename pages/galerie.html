@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="text-center">
-        <button  id="btnAddphoto"type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditionPhotoModal" data-show="admin">Ajouter une photo</button>
+        <button  id="btnAddphoto"type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditionPhotoModal" data-show="ROLE_ADMIN">Ajouter une photo</button>
     </div>
     <div class="row row-cols-2 row-cols-lg-3" id="allImages">
     </div>
@@ -16,7 +16,7 @@
 </div>
 
 <!-- Modal edition -->
-<div class="modal fade" id="EditionPhotoModal" tabindex="-1" aria-labelledby="EditionPhotoModalLabel" aria-hidden="true">
+<div class="modal fade" id="EditionPhotoModal" tabindex="-1" aria-labelledby="EditionPhotoModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -42,4 +42,49 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal suppression -->
+<div class="modal fade" id="deletePhotoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white border border-danger">
+
+      <div class="modal-header border-danger">
+        <h5 class="modal-title">
+          Supprimer la photo
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p>
+          Voulez-vous vraiment supprimer cette image ?
+        </p>
+      </div>
+
+      <div class="modal-footer border-danger">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Annuler
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="confirmDeletePhotoBtn">
+          Oui supprimer
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
 
