@@ -4,30 +4,68 @@ if (reservationForm) {
   reservationForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const formData = new FormData(reservationForm);
+    if (!isConnected()) {
+      const loginModalElement = document.getElementById("loginRequiredModal");
 
-    const reservation = {
-      nom: formData.get("Nom"),
-      prenom: formData.get("Prenom"),
-      allergies: formData.get("Allergies"),
-      nbConvives: formData.get("NbConvives"),
-      date: formData.get("Date"),
-      serviceChoisi: formData.get("serviceChoisi"),
-      heure: formData.get("Heure")
-    };
+      if (loginModalElement) {
+        const loginModal = bootstrap.Modal.getOrCreateInstance(loginModalElement);
+        loginModal.show();
+      } else {
+        alert("Veuillez vous connecter ou créer un compte pour réserver.");
+      }
 
-    const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
-    reservations.push(reservation);
-    localStorage.setItem("reservations", JSON.stringify(reservations));
-
-    const confirmModalElement = document.querySelector("#reservationConfirmModal");
-
-    if (!confirmModalElement) {
-      alert("Votre réservation est confirmée");
       return;
     }
 
-    const confirmModal = bootstrap.Modal.getOrCreateInstance(confirmModalElement);
-    confirmModal.show();
+    const formData = new FormData(reservationForm);
+
+    const date = formData.get("Date");
+    const heure = formData.get("Heure");
+
+    const reservation = {
+      date: `${date} ${heure}`,
+      guests: Number(formData.get("NbConvives")),
+      comment: formData.get("Allergies") || ""
+    };
+
+    const dataToSend = new FormData();
+    dataToSend.append("date", reservation.date);
+    dataToSend.append("guests", reservation.guests);
+    dataToSend.append("comment", reservation.comment);
+    dataToSend.append("token", getToken());
+
+    console.log("TOKEN =", getToken());
+
+    fetch(apiUrl + "reservations", {
+      method: "POST",
+      body: dataToSend,
+      headers: {
+        "X-AUTH-TOKEN": getToken()
+      }
+
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur création réservation");
+        }
+
+        return response.json();
+      })
+      .then(() => {
+        reservationForm.reset();
+
+        const confirmModalElement = document.querySelector("#reservationConfirmModal");
+
+        if (!confirmModalElement) {
+          alert("Votre réservation est confirmée");
+          return;
+        }
+
+        const confirmModal = bootstrap.Modal.getOrCreateInstance(confirmModalElement);
+        confirmModal.show();
+      })
+      .catch((error) => {
+        console.error("Erreur réservation :", error);
+      });
   });
 }

@@ -7,4 +7,85 @@
 <div class="container my-5">
     <div id="reservationsList"></div>
 </div>
+
+<div class="page-all-resa">
+  <section class="container py-5 px-4">
+    <div class="text-center mx-auto mb-5" style="max-width: 800px;">
+      <p class="text-muted">
+        Consultez, modifiez ou annulez vos réservations.
+      </p>
+    </div>
+
+    <div id="reservationsList"></div>
+  </section>
+</div>
+
+<div class="modal fade" id="reservationEditModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title">Modifier la réservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="editReservationForm">
+          <input type="hidden" id="reservationIdInput">
+
+          <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" id="reservationDateInput">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Heure</label>
+            <input type="time" class="form-control" id="reservationTimeInput">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nombre de convives</label>
+            <input type="number" class="form-control" id="reservationGuestsInput">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Commentaire / Allergies</label>
+            <textarea class="form-control" id="reservationCommentInput"></textarea>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary" id="btnSaveReservation">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteReservationModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title">Annuler la réservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-0">
+          Voulez-vous vraiment annuler cette réservation ?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Garder
+        </button>
+
+        <button class="btn btn-danger" id="btnConfirmDeleteReservation">
+          Oui, annuler
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
     

@@ -8,23 +8,25 @@
     <form id="reservationForm">
         <div class="mb-3">
             <label for="NomInput" class="form-label">Nom</label>
-            <input type="text" class="form-control" id="NomInput" placeholder="Votre nom"  name="Nom" > 
+            <input type="text" class="form-control" id="NomInput" placeholder="Votre nom" name="Nom">
         </div>
         <div class="mb-3">
             <label for="PrenomInput" class="form-label">Prénom</label>
-            <input type="text" class="form-control" id="PrenomInput" placeholder="Votre prénom"  name="Prenom"> 
+            <input type="text" class="form-control" id="PrenomInput" placeholder="Votre prénom" name="Prenom">
         </div>
         <div class="mb-3">
-          <label for="AllergieInput" class="form-label">Allergies</label>
-          <input type="text" class="form-control" id="AllergieInput" placeholder="Vos allergies (fruits de mer, arachides..)"   name="Allergies"> 
+            <label for="AllergieInput" class="form-label">Allergies</label>
+            <input type="text" class="form-control" id="AllergieInput"
+                placeholder="Vos allergies (fruits de mer, arachides..)" name="Allergies">
         </div>
         <div class="mb-3">
             <label for="NbConvivesInput" class="form-label">Nombres de convives habituel</label>
-            <input type="number" class="form-control" id="NbConvivesInput" placeholder="Combien vous êtes habituellement ?"   name="NbConvives"> 
+            <input type="number" class="form-control" id="NbConvivesInput"
+                placeholder="Combien vous êtes habituellement ?" name="NbConvives">
         </div>
         <div class="mb-3">
             <label for="DateInput" class="form-label">Date</label>
-            <input type="date" class="form-control" id="DateInput" name="Date"> 
+            <input type="date" class="form-control" id="DateInput" name="Date">
         </div>
         <div class="mb-3">
             <div class="form-check">
@@ -32,8 +34,8 @@
                 <label class="form-check-label" for="midiRadio">
                     Midi
                 </label>
-                </div>
-                <div class="form-check">
+            </div>
+            <div class="form-check">
                 <input class="form-check-input" type="radio" name="serviceChoisi" id="soirRadio" value="Soir" checked>
                 <label class="form-check-label" for="soirRadio">
                     Soir
@@ -56,8 +58,32 @@
             <button type="submit" class="btn btn-primary">Réserver</button>
         </div>
     </form>
+
+    <div class="modal fade" id="loginRequiredModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Connexion requise</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        Veuillez vous connecter ou créer un compte pour effectuer une réservation.
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="/signin" class="btn btn-outline-secondary">
+                            Connexion
+                        </a>
+                        <a href="/signup" class="btn btn-primary">
+                            Créer un compte
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </div>
+
     <div class="text-center pt-3">
         <a href="/allResa" onclick="route(event)">Voir mes réservations</a>
     </div>
 </div>
-

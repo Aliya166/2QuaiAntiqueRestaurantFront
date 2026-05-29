@@ -1,7 +1,7 @@
-const mailInput = document.getElementById("EmailInput");
-const passwordInput = document.getElementById("PasswordInput");
-const btnSingin = document.getElementById("btnSignin");
-const signinForm = document.getElementById("signinForm");
+var mailInput = document.getElementById("EmailInput");
+var passwordInput = document.getElementById("PasswordInput");
+var btnSingin = document.getElementById("btnSignin");
+var signinForm = document.getElementById("signinForm");
 
 btnSingin.addEventListener("click", checkCredentials);
 

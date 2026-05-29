@@ -5,8 +5,19 @@ var platsContainer = document.getElementById("plats-container");
 var dessertsContainer = document.getElementById("desserts-container");
 var boissonsContainer = document.getElementById("boissons-container");
 
-const btnAddMenu = document.getElementById("btnAddMenu");
 const menuForm = document.getElementById("menuForm");
+
+const addMenuButtonContainer = document.getElementById("addMenuButtonContainer");
+
+if (addMenuButtonContainer && getRole() === "ROLE_ADMIN") {
+  addMenuButtonContainer.innerHTML = `
+    <button class="btn btn-primary px-4 py-2" id="btnAddMenu">
+      Ajouter un plat
+    </button>
+  `;
+}
+const btnAddMenu = document.getElementById("btnAddMenu");
+
 const btnSaveMenu = document.getElementById("btnSaveMenu");
 
 const menuIdInput = document.getElementById("menuIdInput");
@@ -134,24 +145,16 @@ if (btnSaveMenu) {
   });
 }
 
+let menuIdToDelete = null;
+
 globalThis.deleteMenu = function (id) {
-  if (!confirm("Voulez-vous vraiment supprimer ce plat ?")) {
-    return;
-  }
+  menuIdToDelete = id;
 
-  fetch(`${apiUrl}menus/${id}`, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erreur suppression menu");
-      }
+  const modal = new bootstrap.Modal(
+    document.getElementById("deleteMenuModal")
+  );
 
-      location.reload();
-    })
-    .catch((error) => {
-      console.error("Erreur suppression menu :", error);
-    });
+  modal.show();
 };
 
 globalThis.editMenu = function (id) {
@@ -173,3 +176,27 @@ globalThis.editMenu = function (id) {
   );
   modal.show();
 };
+
+const confirmDeleteMenuBtn = document.getElementById("confirmDeleteMenuBtn");
+
+if (confirmDeleteMenuBtn) {
+  confirmDeleteMenuBtn.addEventListener("click", function () {
+    if (!menuIdToDelete) {
+      return;
+    }
+
+    fetch(`${apiUrl}menus/${menuIdToDelete}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur suppression menu");
+        }
+
+        location.reload();
+      })
+      .catch((error) => {
+        console.error("Erreur suppression menu :", error);
+      });
+  });
+}

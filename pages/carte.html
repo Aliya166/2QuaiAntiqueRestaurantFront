@@ -1,86 +1,112 @@
 <div class="page-carte">
-  <div class="hero-scene text-center text-white">
-    <div class="hero-scene-content">
-        <h1>La carte</h1>
+    <div class="hero-scene text-center text-white">
+        <div class="hero-scene-content">
+            <h1>La carte</h1>
+        </div>
     </div>
-  </div>
 
-  <section class="carte-menu container py-5"></section>
+    <section class="carte-menu py-5">
+        <div class="container carte-container">
 
-      <div class="mx-auto" style="max-width: 900px;">
-          <h2>Notre carte</h2>
-          <p class="text-muted">
-            <div class="text-center mt-4" data-show="admin">
-              <button
-                class="btn btn-primary"
-                id="btnAddMenu">
-                Ajouter un plat
-              </button>
+            <div class="carte-header text-center">
+                <h2>Notre carte</h2>
+                <div class="carte-divider">✦</div>
+                <p>
+                    Découvrez nos plats préparés avec soin à partir de produits frais.
+                </p>
+
+                <div data-show="ROLE_ADMIN">
+                    <div id="addMenuButtonContainer"></div>
+                </div>
             </div>
-              Découvrez nos plats préparés avec soin à partir de produits frais.
-          </p>
-      </div>
 
-      <h3 class="mt-5">Entrées</h3>
-      <div id="entrees-container" class="row g-4 mb-4"></div>
+            <h3 class="menu-category-title">Entrées</h3>
+            <div id="entrees-container" class="row g-4 mb-5"></div>
 
-      <h3>Plats</h3>
-      <div id="plats-container" class="row g-4 mb-4"></div>
+            <h3 class="menu-category-title">Plats</h3>
+            <div id="plats-container" class="row g-4 mb-5"></div>
 
-      <h3>Desserts</h3>
-      <div id="desserts-container" class="row g-4 mb-4"></div>
+            <h3 class="menu-category-title">Desserts</h3>
+            <div id="desserts-container" class="row g-4 mb-5"></div>
 
-      <h3>Boissons</h3>
-      <div id="boissons-container" class="row g-4 mb-4"></div>
+            <h3 class="menu-category-title">Boissons</h3>
+            <div id="boissons-container" class="row g-4 mb-5"></div>
+
+            <div class="text-center mt-5">
+                <a href="/reserver" onclick="route(event)" class="btn btn-primary">
+                    Réserver
+                </a>
+            </div>
+
+        </div>
     </section>
 
-    <div class="col-12 text-center mt-3">
-        <a href="/reserver" class="btn btn-primary">Réserver</a>
-    </div>
-</div>
+    <div class="modal fade" id="menuModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter un plat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-<div class="modal fade" id="menuModal" tabindex="-1">
+                <div class="modal-body">
+                    <form id="menuForm">
+                        <input type="hidden" id="menuIdInput">
+
+                        <div class="mb-3">
+                            <label class="form-label">Nom du plat</label>
+                            <input type="text" class="form-control" id="menuNameInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="menuDescriptionInput"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prix</label>
+                            <input type="number" step="0.01" class="form-control" id="menuPriceInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Catégorie</label>
+                            <select class="form-control" id="menuCategoryInput">
+                                <option value="entree">Entrée</option>
+                                <option value="plat">Plat</option>
+                                <option value="dessert">Dessert</option>
+                                <option value="boisson">Boisson</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" id="btnSaveMenu">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteMenuModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4">
       <div class="modal-header">
-        <h5 class="modal-title">Ajouter un plat</h5>
+        <h5 class="modal-title">Supprimer ce plat ?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
       <div class="modal-body">
-        <form id="menuForm">
-          <input type="hidden" id="menuIdInput">
-
-          <div class="mb-3">
-            <label class="form-label">Nom du plat</label>
-            <input type="text" class="form-control" id="menuNameInput">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" id="menuDescriptionInput"></textarea>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Prix</label>
-            <input type="number" step="0.01" class="form-control" id="menuPriceInput">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Catégorie</label>
-            <select class="form-control" id="menuCategoryInput">
-              <option value="entree">Entrée</option>
-              <option value="plat">Plat</option>
-              <option value="dessert">Dessert</option>
-              <option value="boisson">Boisson</option>
-            </select>
-          </div>
-        </form>
+        Cette action est définitive. Voulez-vous vraiment supprimer ce plat ?
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button class="btn btn-primary" id="btnSaveMenu">Enregistrer</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Annuler
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteMenuBtn">
+          Supprimer
+        </button>
       </div>
     </div>
   </div>
