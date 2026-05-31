@@ -1,3 +1,34 @@
+function fillReservationWithUserProfile() {
+  if (!isConnected()) return;
+
+  fetch(apiUrl + "user/me", {
+    headers: {
+      "X-AUTH-TOKEN": getToken()
+    }
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erreur chargement profil");
+      }
+
+      return response.json();
+    })
+    .then((user) => {
+      const nomInput = document.querySelector('[name="Nom"]');
+      const prenomInput = document.querySelector('[name="Prenom"]');
+      const allergiesInput = document.querySelector('[name="Allergies"]');
+
+      if (nomInput) nomInput.value = user.lastName || "";
+      if (prenomInput) prenomInput.value = user.firstName || "";
+      if (allergiesInput) allergiesInput.value = user.allergy || "";
+    })
+    .catch((error) => {
+      console.error("Erreur profil réservation :", error);
+    });
+}
+
+fillReservationWithUserProfile();
+
 const reservationForm = document.getElementById("reservationForm");
 
 if (reservationForm) {
