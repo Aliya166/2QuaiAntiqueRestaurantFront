@@ -57,9 +57,6 @@ function showAndHideElementsForRoles(){
     const userConnected = isConnected();
     const role = getRole();
 
-    console.log("CONNECTED: " + userConnected);
-    console.log("ROLE:", role);
-
     let allElementsToEdit = document.querySelectorAll('[data-show]');
 
     allElementsToEdit.forEach(element =>{
@@ -110,14 +107,12 @@ function getInfosUser(){
             return response.json();
         }
         else{
-            console.log("Impossible de récupérer les informations utilisateur");
+            return null;
         }
     })
     .then(result => {
         return result;
     })
 
-    .catch(error =>{
-        console.error("erreur lors de la récupération des données utilisateur", error);
-    });
+    .catch(() =>{});
 }

@@ -26,10 +26,6 @@ const LoadContentPage = async () => {
   const path = globalThis.location.pathname;
   const actualRoute = getRouteByUrl(path);
 
-  console.log("CURRENT PATH:", path);
-  console.log("ACTUAL ROUTE:", actualRoute);
-  console.log("ROLE USER:", getRole());
-
   const allRolesArray = actualRoute.authorize;
 
   if (allRolesArray.length > 0) {
@@ -58,7 +54,7 @@ const LoadContentPage = async () => {
     const scriptTag = document.createElement("script");
     scriptTag.setAttribute("type", "text/javascript");
     scriptTag.setAttribute("src", actualRoute.pathJS);
-    scriptTag.setAttribute("data-route-script", "true");
+    scriptTag.dataset.routeScript = "true";
 
     document.querySelector("body").appendChild(scriptTag);
   }
@@ -73,8 +69,6 @@ const routeEvent = (event) => {
 
   const link = event.currentTarget;
   const url = link.getAttribute("href");
-
-  console.log("CLICK ROUTE:", url);
 
   globalThis.history.pushState({}, "", url);
   LoadContentPage();

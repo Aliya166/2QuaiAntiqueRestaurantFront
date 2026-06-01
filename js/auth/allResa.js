@@ -73,9 +73,7 @@ function loadReservations() {
         `;
       }).join("");
     })
-    .catch((error) => {
-      console.error("Erreur réservations :", error);
-    });
+    .catch(() => {});
 }
 
 let reservationIdToDelete = null;

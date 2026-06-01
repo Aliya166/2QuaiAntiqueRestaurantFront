@@ -3,7 +3,6 @@ const galerieImage = document.getElementById("allImages");
 fetch(apiUrl + "pictures")
   .then((response) => response.json())
   .then((pictures) => {
-    console.log("Pictures:", pictures);
 
     let html = "";
 
@@ -14,9 +13,7 @@ fetch(apiUrl + "pictures")
     galerieImage.innerHTML = html;
     showAndHideElementsForRoles();
   })
-  .catch((error) => {
-    console.error("Erreur galerie :", error);
-  });
+  .catch(() => {});
 
 function getImage(id, titre, urlImage) {
   titre = sanitizeHTML(titre);
@@ -96,9 +93,7 @@ if (btnSavePhoto) {
         addPhotoForm.reset();
         location.reload();
       })
-      .catch((error) => {
-        console.error("Erreur ajout photo :", error);
-      });
+      .catch(() => {});
   });
 }
 
@@ -143,8 +138,6 @@ if (confirmDeletePhotoBtn) {
 
         pictureIdToDelete = null;
       })
-      .catch((error) => {
-        console.error("Erreur suppression :", error);
-      });
+      .catch(() => {});
   });
 }

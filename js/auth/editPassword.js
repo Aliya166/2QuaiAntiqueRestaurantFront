@@ -26,8 +26,6 @@ if (editPasswordForm) {
         const modal = new bootstrap.Modal(document.getElementById("successPasswordModal"));
         modal.show();
       })
-      .catch((error) => {
-        console.error("Erreur mot de passe :", error);
-      });
+      .catch(() => {});
   });
 }

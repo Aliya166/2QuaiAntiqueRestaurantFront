@@ -18,9 +18,7 @@ fetch(apiUrl + "user/me", {
         document.getElementById("EmailInput").value = user.email || "";
         document.getElementById("AllergieInput").value = user.allergy || "";
     })
-    .catch((error) => {
-        console.error("Erreur profil :", error);
-    });
+    .catch(() => {});
 
 if (accountForm) {
     accountForm.addEventListener("submit", function (event) {
@@ -52,8 +50,6 @@ if (accountForm) {
                 const modal = new bootstrap.Modal(document.getElementById("successAccountModal"));
                 modal.show();
             })
-            .catch((error) => {
-                console.error("Erreur modification profil :", error);
-            });
+            .catch(() => {});
     });
 }

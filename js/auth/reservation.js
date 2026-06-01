@@ -22,9 +22,7 @@ function fillReservationWithUserProfile() {
       if (prenomInput) prenomInput.value = user.firstName || "";
       if (allergiesInput) allergiesInput.value = user.allergy || "";
     })
-    .catch((error) => {
-      console.error("Erreur profil réservation :", error);
-    });
+    .catch(() => {});
 }
 
 fillReservationWithUserProfile();
@@ -50,11 +48,18 @@ if (reservationForm) {
 
     const formData = new FormData(reservationForm);
 
-    const date = formData.get("Date");
-    const heure = formData.get("Heure");
+    const date = formData.get("Date") || "";
+    const heure = formData.get("Heure") || "";
+
+    // Ensure parts are strings to avoid default object stringification (e.g. '[object Object]')
+    const reservationDate = [date, heure]
+      .filter(Boolean)
+      .map((part) => typeof part === "string" ? part.trim() : "")
+      .filter(Boolean)
+      .join(" ");
 
     const reservation = {
-      date: `${date} ${heure}`,
+      date: reservationDate,
       guests: Number(formData.get("NbConvives")),
       comment: formData.get("Allergies") || ""
     };
@@ -65,7 +70,6 @@ if (reservationForm) {
     dataToSend.append("comment", reservation.comment);
     dataToSend.append("token", getToken());
 
-    console.log("TOKEN =", getToken());
 
     fetch(apiUrl + "reservations", {
       method: "POST",
@@ -95,8 +99,8 @@ if (reservationForm) {
         const confirmModal = bootstrap.Modal.getOrCreateInstance(confirmModalElement);
         confirmModal.show();
       })
-      .catch((error) => {
-        console.error("Erreur réservation :", error);
+      .catch(() => {
+        alert("Erreur lors de la création de la réservation");
       });
   });
 }

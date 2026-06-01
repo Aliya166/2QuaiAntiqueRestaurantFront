@@ -1,9 +1,8 @@
-console.log("MENU JS LOADED");
 
-var entreesContainer = document.getElementById("entrees-container");
-var platsContainer = document.getElementById("plats-container");
-var dessertsContainer = document.getElementById("desserts-container");
-var boissonsContainer = document.getElementById("boissons-container");
+const entreesContainer = document.getElementById("entrees-container");
+const platsContainer = document.getElementById("plats-container");
+const dessertsContainer = document.getElementById("desserts-container");
+const boissonsContainer = document.getElementById("boissons-container");
 
 const menuForm = document.getElementById("menuForm");
 
@@ -26,12 +25,13 @@ const menuDescriptionInput = document.getElementById("menuDescriptionInput");
 const menuPriceInput = document.getElementById("menuPriceInput");
 const menuCategoryInput = document.getElementById("menuCategoryInput");
 
-if (!entreesContainer || !platsContainer || !dessertsContainer || !boissonsContainer) {
-  console.error("Un ou plusieurs containers sont introuvables");
-} else {
+if (entreesContainer && platsContainer && dessertsContainer && boissonsContainer) {
   fetch(apiUrl + "menus")
-    .then((response) => response.json())
+    .then((response) => {
+      return response.json();
+    })
     .then((data) => {
+
       entreesContainer.innerHTML = "";
       platsContainer.innerHTML = "";
       dessertsContainer.innerHTML = "";
@@ -94,109 +94,102 @@ if (!entreesContainer || !platsContainer || !dessertsContainer || !boissonsConta
         }
       });
     })
-    .catch((error) => {
-      console.error("Erreur :", error);
+
+    .catch(() => {});
+}
+  if (btnAddMenu) {
+    btnAddMenu.addEventListener("click", function () {
+      menuForm.reset();
+      menuIdInput.value = "";
+
+      const modal = new bootstrap.Modal(document.getElementById("menuModal"));
+      modal.show();
     });
-}
-
-if (btnAddMenu) {
-  btnAddMenu.addEventListener("click", function () {
-    menuForm.reset();
-    menuIdInput.value = "";
-
-    const modal = new bootstrap.Modal(document.getElementById("menuModal"));
-    modal.show();
-  });
-}
-
-if (btnSaveMenu) {
-  btnSaveMenu.addEventListener("click", function () {
-    const formData = new FormData();
-
-    formData.append("name", menuNameInput.value.trim());
-    formData.append("description", menuDescriptionInput.value.trim());
-    formData.append("price", menuPriceInput.value.trim());
-    formData.append("category", menuCategoryInput.value);
-
-    const menuId = menuIdInput.value;
-
-    const url = menuId
-      ? `${apiUrl}menus/${menuId}/update`
-      : `${apiUrl}menus`;
-
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur ajout/modification menu");
-        }
-
-        return response.json();
-      })
-      .then(() => {
-        menuForm.reset();
-        location.reload();
-      })
-      .catch((error) => {
-        console.error("Erreur ajout/modification menu :", error);
-      });
-  });
-}
-
-let menuIdToDelete = null;
-
-globalThis.deleteMenu = function (id) {
-  menuIdToDelete = id;
-
-  const modal = new bootstrap.Modal(
-    document.getElementById("deleteMenuModal")
-  );
-
-  modal.show();
-};
-
-globalThis.editMenu = function (id) {
-  const menu = globalThis.menusData[id];
-
-  if (!menu) {
-    console.error("Menu not found");
-    return;
   }
 
-  menuIdInput.value = menu.id;
-  menuNameInput.value = menu.name;
-  menuDescriptionInput.value = menu.description;
-  menuPriceInput.value = menu.price;
-  menuCategoryInput.value = menu.category;
+  if (btnSaveMenu) {
+    btnSaveMenu.addEventListener("click", function () {
+      const formData = new FormData();
 
-  const modal = new bootstrap.Modal(
-    document.getElementById("menuModal")
-  );
-  modal.show();
-};
+      formData.append("name", menuNameInput.value.trim());
+      formData.append("description", menuDescriptionInput.value.trim());
+      formData.append("price", menuPriceInput.value.trim());
+      formData.append("category", menuCategoryInput.value);
 
-const confirmDeleteMenuBtn = document.getElementById("confirmDeleteMenuBtn");
+      const menuId = menuIdInput.value;
 
-if (confirmDeleteMenuBtn) {
-  confirmDeleteMenuBtn.addEventListener("click", function () {
-    if (!menuIdToDelete) {
+      const url = menuId
+        ? `${apiUrl}menus/${menuId}/update`
+        : `${apiUrl}menus`;
+
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erreur ajout/modification menu");
+          }
+
+          return response.json();
+        })
+        .then(() => {
+          menuForm.reset();
+          location.reload();
+        })
+        .catch(() => { });
+    });
+  }
+
+  let menuIdToDelete = null;
+
+  globalThis.deleteMenu = function (id) {
+    menuIdToDelete = id;
+
+    const modal = new bootstrap.Modal(
+      document.getElementById("deleteMenuModal")
+    );
+
+    modal.show();
+  };
+
+  globalThis.editMenu = function (id) {
+    const menu = globalThis.menusData[id];
+
+    if (!menu) {
       return;
     }
 
-    fetch(`${apiUrl}menus/${menuIdToDelete}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur suppression menu");
-        }
+    menuIdInput.value = menu.id;
+    menuNameInput.value = menu.name;
+    menuDescriptionInput.value = menu.description;
+    menuPriceInput.value = menu.price;
+    menuCategoryInput.value = menu.category;
 
-        location.reload();
+    const modal = new bootstrap.Modal(
+      document.getElementById("menuModal")
+    );
+    modal.show();
+  };
+
+  const confirmDeleteMenuBtn = document.getElementById("confirmDeleteMenuBtn");
+
+  if (confirmDeleteMenuBtn) {
+    confirmDeleteMenuBtn.addEventListener("click", function () {
+      if (!menuIdToDelete) {
+        return;
+      }
+
+      fetch(`${apiUrl}menus/${menuIdToDelete}`, {
+        method: "DELETE",
       })
-      .catch((error) => {
-        console.error("Erreur suppression menu :", error);
-      });
-  });
-}
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erreur suppression menu");
+          }
+
+          location.reload();
+        })
+        .catch(() => {});
+    });
+  }
