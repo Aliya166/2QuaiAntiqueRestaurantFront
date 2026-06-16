@@ -1,7 +1,7 @@
-var mailInput = document.getElementById("EmailInput");
-var passwordInput = document.getElementById("PasswordInput");
-var btnSingin = document.getElementById("btnSignin");
-var signinForm = document.getElementById("signinForm");
+const mailInput = document.getElementById("EmailInput");
+const passwordInput = document.getElementById("PasswordInput");
+const btnSingin = document.getElementById("btnSignin");
+const signinForm = document.getElementById("signinForm");
 
 btnSingin.addEventListener("click", checkCredentials);
 
@@ -23,9 +23,6 @@ function checkCredentials(){
         redirect: 'follow'
     };
 
-    console.log(raw);
-    console.log("API:", apiUrl+"login");
-
     fetch(apiUrl+"login", requestOptions)
     .then(response => {
         if(response.ok){
@@ -44,5 +41,5 @@ function checkCredentials(){
         setCookie(RoleCookieName, result.roles[0], 7);
         globalThis.location.replace("/");
     })
-    .catch(error => console.log('error', error));
+    .catch(() => {});
 }

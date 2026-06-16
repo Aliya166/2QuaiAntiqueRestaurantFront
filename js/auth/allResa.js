@@ -107,9 +107,7 @@ if (btnConfirmDeleteReservation) {
 
         location.reload();
       })
-      .catch((error) => {
-        console.error("Erreur suppression réservation :", error);
-      });
+      .catch(() => {});
   });
 }
 
@@ -117,7 +115,6 @@ globalThis.editReservation = function (id) {
   const reservation = globalThis.reservationsData[id];
 
   if (!reservation) {
-    console.error("Réservation introuvable");
     return;
   }
 
@@ -165,9 +162,7 @@ if (btnSaveReservation) {
 
         location.reload();
       })
-      .catch((error) => {
-        console.error("Erreur modification réservation :", error);
-      });
+      .catch(() => {});
   });
 }
 
